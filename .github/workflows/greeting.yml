@@ -1,26 +1,41 @@
-name: Greetings Workflow # 1. 워크플로의 이름
+# .github/workflows/greeting.yml (또는 네 워크플로우 파일)
 
-on: # 2. 어떤 이벤트에 실행될지 정의
-  push: # 코드가 푸시되었을 때
-    branches: # 어떤 브랜치에 푸시되었을 때?
-      - main # main 브랜치 (또는 네 기본 브랜치 이름)
-  workflow_dispatch: # 수동으로 실행할 수 있도록 버튼 추가
+name: Greetings and Python Test Workflow # 이름 변경
 
-jobs: # 3. 실행될 작업(들) 정의
-  say_hello_job: # 잡의 ID (사용자 정의)
-    name: Say Hello Job # Actions 탭에 표시될 잡의 이름
-    runs-on: ubuntu-latest # 4. 어떤 러너 환경에서 실행될지
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-    steps: # 5. 잡 내에서 실행될 단계(들)
-      - name: Checkout Repository Code # 스텝의 이름
-        uses: actions/checkout@v4 # 6. 미리 만들어진 액션 사용 (코드 체크아웃)
+jobs:
+  say_hello_and_test_job: # 잡 이름 변경 (선택)
+    name: Say Hello and Run Python Tests # 잡 이름 변경 (선택)
+    runs-on: ubuntu-latest
 
-      - name: Print a Greeting Message # 스텝의 이름
-        run: echo "🎉 Hello GitHub Actions! My first workflow is running!" # 6. 셸 명령어 직접 실행
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: Print a Greeting Message
+        run: echo "🎉 Hello GitHub Actions! My first workflow is running!"
 
       - name: Show Current Directory
-        run: | # 여러 줄 명령어
+        run: |
           echo "I am currently in this directory:"
           pwd
           echo "And these are the files:"
           ls -la
+
+      # --- 👇 파이썬 테스트를 위한 스텝들 추가! ---
+      - name: Set up Python
+        uses: actions/setup-python@v5 # Python 설치 액션
+        with:
+          python-version: '3.x' # 원하는 Python 버전 (예: 3.8, 3.9, 3.10 등)
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run Pytest
+        run: pytest # pytest 실행!
