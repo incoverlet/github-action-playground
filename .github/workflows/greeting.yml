@@ -1,0 +1,26 @@
+name: Greetings Workflow # 1. 워크플로의 이름
+
+on: # 2. 어떤 이벤트에 실행될지 정의
+  push: # 코드가 푸시되었을 때
+    branches: # 어떤 브랜치에 푸시되었을 때?
+      - main # main 브랜치 (또는 네 기본 브랜치 이름)
+  workflow_dispatch: # 수동으로 실행할 수 있도록 버튼 추가
+
+jobs: # 3. 실행될 작업(들) 정의
+  say_hello_job: # 잡의 ID (사용자 정의)
+    name: Say Hello Job # Actions 탭에 표시될 잡의 이름
+    runs-on: ubuntu-latest # 4. 어떤 러너 환경에서 실행될지
+
+    steps: # 5. 잡 내에서 실행될 단계(들)
+      - name: Checkout Repository Code # 스텝의 이름
+        uses: actions/checkout@v4 # 6. 미리 만들어진 액션 사용 (코드 체크아웃)
+
+      - name: Print a Greeting Message # 스텝의 이름
+        run: echo "🎉 Hello GitHub Actions! My first workflow is running!" # 6. 셸 명령어 직접 실행
+
+      - name: Show Current Directory
+        run: | # 여러 줄 명령어
+          echo "I am currently in this directory:"
+          pwd
+          echo "And these are the files:"
+          ls -la
