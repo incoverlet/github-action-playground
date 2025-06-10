@@ -1,2 +1,2 @@
 pytest
-pytest-htmㅣ # html파일로 pytest내용을 출력해보자!
+pytest-html # html파일로 pytest내용을 출력해보자!
