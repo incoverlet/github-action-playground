@@ -41,6 +41,20 @@ jobs:
       - name: Run Pytest and Generate HTML Report # pytest 실행 시 HTML 리포트 생성 옵션 추가
         run: pytest --html=report.html --self-contained-html
 
+      - name: Summarize Test Results on GitHub Summary # 스텝의 이름
+        run: | # 여러 줄 명령어를 실행할 때 사용하는 문법
+          echo "## ✅ Python Tests Completed!" >> $GITHUB_STEP_SUMMARY # 제목 추가
+          echo "---" >> $GITHUB_STEP_SUMMARY # 구분선 추가
+          echo "- **Detailed Report:** [Download HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "- All tests passed successfully for commit **${{ github.sha }}**." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY # 줄바꿈
+
+      # 참고: 위에 있는 URL은 GitHub Actions가 실행된 실제 URL로 자동 변환됩니다.
+      # ${{ github.repository }} : 현재 저장소 이름 (예: incoverlet/github-action-playground)
+      # ${{ github.run_id }}    : 현재 워크플로우 실행의 고유 ID
+      # ${{ github.sha }}       : 현재 커밋의 SHA 값
+      
+
       # --- 👇 이 스텝을 추가! 👇 ---
       - name: Upload Test Report # 생성된 report.html을 아티팩트(Artifact)로 업로드
         uses: actions/upload-artifact@v4 # 아티팩트 업로드 전용 액션
